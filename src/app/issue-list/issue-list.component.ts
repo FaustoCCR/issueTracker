@@ -9,6 +9,8 @@ import {Issue} from "../model/issue";
 })
 export class IssueListComponent implements OnInit {
 
+  // it will toggle the appearance of the report issue form
+  showReportIssue = false;
   issues: Issue[] = [];
 
   // IssuesService Injection
@@ -21,6 +23,11 @@ export class IssueListComponent implements OnInit {
 
   private getIssues(){
     this.issues = this.issueService.getPendingIssues();
+  }
+
+  onCloseReport(){
+    this.showReportIssue = false;
+    this.getIssues();
   }
 
 }
