@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {IssuesService} from "../services/issues.service";
+import {Issue} from "../model/issue";
 
 @Component({
   selector: 'app-issue-list',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IssueListComponent implements OnInit {
 
-  constructor() { }
+  issues: Issue[] = [];
+
+  // IssuesService Injection
+  constructor(private issueService: IssuesService) {
+  }
 
   ngOnInit(): void {
+    this.getIssues();
+  }
+
+  private getIssues(){
+    this.issues = this.issueService.getPendingIssues();
   }
 
 }
