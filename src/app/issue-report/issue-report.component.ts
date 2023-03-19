@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {IssuesService} from "../services/issues.service";
+import {Issue} from "../model/issue";
 
 @Component({
   selector: 'app-issue-report',
@@ -16,9 +17,11 @@ export class IssueReportComponent implements OnInit {
   @Output() formClose = new EventEmitter();
 
   issueForm: FormGroup | undefined;
+  suggestions: Issue[] = [];
 
   constructor(private builder: FormBuilder,
-              private  issueService: IssuesService) { }
+              private issueService: IssuesService) {
+  }
 
   ngOnInit(): void {
     this.issueForm = this.builder.group({
@@ -27,11 +30,14 @@ export class IssueReportComponent implements OnInit {
       priority: ['', Validators.required],
       type: ['', Validators.required]
     });
+    this.issueForm.controls['title'].valueChanges.subscribe((title: string) => {
+      this.suggestions = this.issueService.getSuggestions(title);
+    })
   }
 
-  addIssue(){
+  addIssue() {
 
-    if (this.issueForm && this.issueForm.invalid){
+    if (this.issueForm && this.issueForm.invalid) {
       this.issueForm.markAllAsTouched();
       // to mark all control as touched
       // This makes validation messages appear automatically
@@ -40,5 +46,6 @@ export class IssueReportComponent implements OnInit {
     this.issueService.createIssue(this.issueForm?.value);
     this.formClose.emit(); //call the emit method
   }
+
 
 }
