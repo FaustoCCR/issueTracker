@@ -8,10 +8,11 @@ import {Issue} from "../model/issue";
   styleUrls: ['./issue-list.component.css']
 })
 export class IssueListComponent implements OnInit {
-
+  // properties
   // it will toggle the appearance of the report issue form
   showReportIssue = false;
   issues: Issue[] = [];
+  selectedIssue: Issue | null = null;
 
   // IssuesService Injection
   constructor(private issueService: IssuesService) {
@@ -28,6 +29,14 @@ export class IssueListComponent implements OnInit {
   onCloseReport(){
     this.showReportIssue = false;
     this.getIssues();
+  }
+  onConfirm(confirmed: boolean){
+    if (confirmed && this.selectedIssue){
+      this.issueService.completeIssue(this.selectedIssue);
+      this.getIssues();
+    }
+
+    this.selectedIssue = null;
   }
 
 }
