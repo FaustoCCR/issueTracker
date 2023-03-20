@@ -10,7 +10,10 @@ import {Issue} from "../model/issue";
 export class IssueListComponent implements OnInit {
   // properties
   // it will toggle the appearance of the report issue form
+  showMainContainer = true;
   showReportIssue = false;
+  showConfirmDialog = false;
+  showEditIssue = false;
   issues: Issue[] = [];
   selectedIssue: Issue | null = null;
 
@@ -22,21 +25,36 @@ export class IssueListComponent implements OnInit {
     this.getIssues();
   }
 
-  private getIssues(){
+  private getIssues() {
     this.issues = this.issueService.getPendingIssues();
   }
 
-  onCloseReport(){
+  onCloseReport() {
     this.showReportIssue = false;
+    this.showEditIssue = false;
+    this.showMainContainer = true;
+    this.selectedIssue = null;
     this.getIssues();
   }
-  onConfirm(confirmed: boolean){
-    if (confirmed && this.selectedIssue){
+
+  showResolveDialog(selectedIssue: Issue) {
+    this.showConfirmDialog = true;
+    this.selectedIssue = selectedIssue;
+  }
+
+  onConfirm(confirmed: boolean) {
+    if (confirmed && this.selectedIssue) {
       this.issueService.completeIssue(this.selectedIssue);
       this.getIssues();
     }
-
+    this.showConfirmDialog = false;
     this.selectedIssue = null;
+  }
+
+  onEdit(selectedIssue: Issue) {
+    this.showMainContainer = false;
+    this.showEditIssue = true;
+    this.selectedIssue = selectedIssue;
   }
 
 }

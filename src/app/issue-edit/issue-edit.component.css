@@ -1,0 +1,7 @@
+.clr-input, .clr-textarea {
+  width: 100%;
+  max-width: 600px;
+}
+button {
+  margin-top: 25px;
+}

@@ -1,7 +1,8 @@
 <!--The ng-container element will be displayed when the report issue
 form is not visible-->
-<ng-container *ngIf="showReportIssue == false">
-  <button class="btn btn-primary" (click)="showReportIssue = true">
+<ng-container *ngIf="showMainContainer">
+  <button class="btn btn-primary" (click)="showReportIssue = true;
+  showMainContainer = false;">
     Add new issue
   </button>
   <clr-datagrid>
@@ -16,8 +17,11 @@ form is not visible-->
     <clr-dg-row *clrDgItems="let issue of issues">
       <!--action overflow component-->
       <clr-dg-action-overflow>
-        <button class="action-item" (click)="selectedIssue = issue">
+        <button class="action-item" (click)="showResolveDialog(issue)">
           Resolve
+        </button>
+        <button class="action-item" (click)="onEdit(issue)">
+          Edit
         </button>
       </clr-dg-action-overflow>
       <clr-dg-cell>{{issue.issueNo}}</clr-dg-cell>
@@ -40,7 +44,12 @@ form is not visible-->
 
 <!--dialog-->
 <!--? safe navigation property-->
-<app-confirm-dialog *ngIf="selectedIssue"
+<app-confirm-dialog *ngIf="showConfirmDialog && selectedIssue"
                     [issueNo]="selectedIssue.issueNo"
                     (confirm)="onConfirm($event)">
 </app-confirm-dialog>
+
+<app-issue-edit *ngIf="showEditIssue && selectedIssue"
+                [issue]="selectedIssue"
+                (formClose)="onCloseReport()">
+</app-issue-edit>
